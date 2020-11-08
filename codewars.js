@@ -368,5 +368,118 @@ function solve6(arr) {
 	return result;
 }
 
-const test = solve6([5, 9, 6, 9, 6, 5, 9, 9, 4, 4]);
+const getPINs = observed => {
+	const digits = [...observed];
+	const isSameRank = (num, checked) => Math.ceil(num / 3) === Math.ceil(checked / 3);
+	const mapped = digits.map(digit => {
+		if (digit === "0") return [0, 8];
+		let num = Number(digit);
+		const close = [num + 1, num - 1].filter(n => isSameRank(num, n));
+		const far = [num + 3, num - 3].filter(n => n > 0 && n < 10);
+		if (num === 8) far.push(0);
+		return [num, ...close, ...far];
+	});
+	return mapped;
+
+	// const doubleMapped = mapped.forEach((sub, ind) => {
+	// 	if (ind === mapped.length - 1) return [];
+	// 	return sub.map((n, i) => mapped[ind + 1].map(x => x + n.toString()));
+	// });
+	// return doubleMapped;
+	// return answer.sort((a, b) => a - b).filter((value, index, self) => self.indexOf(value) === index);
+};
+
+const tripleX = str => str.search("x") >= 0 && str.search("x") === str.search("xxx");
+
+const evenOrOdd = str => {
+	const odd = str
+		.split("")
+		.filter(n => n % 2)
+		.map(n => +n);
+	const even = str
+		.split("")
+		.filter(n => !(n % 2))
+		.map(n => +n);
+	const oddSum = odd.length > 0 ? odd.reduce((a, b) => a + b) : 0;
+	const evenSum = even.length > 0 ? even.reduce((a, b) => a + b) : 0;
+
+	return oddSum === evenSum
+		? "Even and Odd are the same"
+		: oddSum > evenSum
+		? "Odd is greater than Even"
+		: "Even is greater than Odd";
+};
+
+const oddOrEven = array => (array.length < 1 ? "even" : array.reduce((a, b) => a + b) % 2 === 0 ? "even" : "odd");
+
+const consecutive = (arr, a, b) => {
+	for (let i = 0; i < arr.length; i++) {
+		if ((arr[i] === a && arr[i + 1] === b) || (arr[i] === b && arr[i + 1] === a)) {
+			return true;
+		}
+	}
+	return false;
+};
+
+const pyramid = n =>
+	Array(n)
+		.fill([1])
+		.map((e, i) => (e = Array(i + 1).fill(1)));
+
+function solve4(s) {
+	const letters = s.split("");
+	const lower = letters.filter(l => l.toLowerCase() === l);
+	const upper = letters.filter(l => l.toUpperCase() === l);
+	return lower.length >= upper.length ? s.toLowerCase() : s.toUpperCase();
+}
+
+const reverse = (n, l = 0) => {
+	l = l * 10 + (n % 10);
+	n = Math.floor(n / 10);
+	return n > 0 ? reverse(n, l) : l;
+};
+
+const killer = (suspectInfo, dead) =>
+	Object.keys(suspectInfo).find(suspect => dead.every(corpse => suspectInfo[suspect].indexOf(corpse) >= 0));
+
+const findShort = s =>
+	s
+		.split(" ")
+		.sort((a, b) => a.length - b.length)
+		.shift().length;
+
+const stringTask = s => {
+	const one = s
+		.toLowerCase()
+		.replace(/['a','o','y','e','u','i']/g, "")
+		.split("")
+		.join(".");
+	return one ? "." + one : "";
+};
+
+const duplicateSandwich = a => {
+	const findDupIndices = (arr, val) => {
+		const indices = [];
+		for (let i = 0; i < arr.length; i++) {
+			if (arr[i] === val) {
+				indices.push(i);
+			}
+		}
+		return indices;
+	};
+	const ind = findDupIndices(
+		a,
+		a.find((el, i) => a.indexOf(el) != i)
+	);
+	return a.slice(ind[0] + 1, ind[1]);
+};
+
+function sumOrProduct(array, n) {
+	const sorted = array.sort((a, b) => a - b);
+	const product = sorted.slice(0, n).reduce((a, b) => a * b);
+	const sum = sorted.slice(-n, sorted.length).reduce((a, b) => a + b);
+	return product > sum ? "product" : product < sum ? "sum" : "same";
+}
+
+const test = sumOrProduct([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 4);
 console.log(test);
